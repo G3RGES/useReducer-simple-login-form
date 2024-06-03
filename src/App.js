@@ -16,6 +16,8 @@ function App() {
       }
     } catch (error) {
       setError("incorrect username or password");
+      setUsername("");
+      setPassword("");
     }
   };
 
@@ -53,6 +55,8 @@ function App() {
         >
           Log in
         </button>
+
+        <p className="text-red-500 text-center">{error}</p>
       </form>
     </>
   );
