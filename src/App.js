@@ -30,14 +30,22 @@ const logInReducer = (state, action) => {
         password: "",
       };
     }
+    case "logOut": {
+      return {
+        ...state,
+        loggedIn: false,
+      };
+    }
+    default:
+      return state;
   }
 };
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [error, setError] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [error, setError] = useState("");
   const [state, dispatch] = useReducer(logInReducer, {
     username: "",
     password: "",
@@ -47,19 +55,22 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
+    // setError("");
+    dispatch({ type: "logIn" });
     try {
-      if (username === "Gerges" && password === "1995") {
-        setLoggedIn(true);
-        setUsername("");
-        setPassword("");
+      if (state.username === "Gerges" && state.password === "1995") {
+        // setLoggedIn(true);
+        // setUsername("");
+        // setPassword("");
+        dispatch({ type: "success" });
       } else {
         throw Error;
       }
     } catch (error) {
-      setError("incorrect username or password");
-      setUsername("");
-      setPassword("");
+      dispatch({ type: "error" });
+      // setError("incorrect username or password");
+      // setUsername("");
+      // setPassword("");
     }
   };
 
@@ -70,16 +81,16 @@ function App() {
       </h1>
       <hr />
       <div className="">
-        {loggedIn ? (
+        {state.loggedIn ? (
           <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-blue-600 text-center font-semibold text-2xl">
-              Welcom {username}
+              Welcom {state.username}
             </p>
 
             <button
               className="bg-red-500 text-white text-lg 
               font-medium rounded-lg py-1 px-3"
-              onClick={() => setLoggedIn(!loggedIn)}
+              onClick={() => dispatch({ type: "logOut" })}
             >
               Log out
             </button>
@@ -94,16 +105,28 @@ function App() {
               type="text"
               autoComplete="username"
               placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={state.username}
+              onChange={(e) =>
+                dispatch({
+                  type: "field",
+                  fieldName: "username",
+                  payload: e.target.value,
+                })
+              }
             />
             <input
               className="border rounded-lg px-2 py-1"
               type="password"
               autoComplete="current-password"
               placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={state.password}
+              onChange={(e) =>
+                dispatch({
+                  type: "field",
+                  fieldName: "password",
+                  payload: e.target.value,
+                })
+              }
             />
 
             <button
@@ -114,7 +137,7 @@ function App() {
               Log in
             </button>
 
-            <p className="text-red-500 text-center">{error}</p>
+            <p className="text-red-500 text-center">{state.error}</p>
           </form>
         )}
       </div>
