@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState("");
+  const [state, dispatch] = useReducer(logInReducer, {
+    username: "",
+    password: "",
+    loggedIn: false,
+    error: "",
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
